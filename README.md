@@ -1,6 +1,8 @@
 # TrackFlow Server
-
-一个使用 Koa + TypeScript 构建的简单 Web 服务器。
+<div align="center">
+  <img src="./src/assets/image/logo3.png" alt="TrackFlow Logo" width="200"/>
+</div>
+一个使用 Koa + TypeScript 构建的任务分配和追踪服务器。
 
 ## 快速开始
 
@@ -60,3 +62,4 @@ package.json      # 项目依赖和脚本
 pnpm add koa koa-body @koa/router log4js qs jsonwebtoken pm2
 pnpm add -D typescript @types/koa @types/koa-body @types/koa__router  @types/qs @types/jsonwebtoken @types/node prettier eslint ts-node
 ```
+## TODO 开发者请按照TODO.md日程进行开发
