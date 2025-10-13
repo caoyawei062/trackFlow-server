@@ -6,9 +6,26 @@
   "scripts": {
     "build": "tsc"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@koa/router": "^14.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "koa": "^3.0.1",
+    "koa-body": "^6.0.1",
+    "log4js": "^6.9.1",
+    "pm2": "^6.0.13",
+    "qs": "^6.14.0"
+  },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/koa": "^3.0.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/node": "^24.7.2",
+    "@types/qs": "^6.14.0",
+    "eslint": "^9.37.0",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
-  "private": true
+  "private": true,
+  "packageManager": "pnpm@10.18.2+sha512.9fb969fa749b3ade6035e0f109f0b8a60b5d08a1a87fdf72e337da90dcc93336e2280ca4e44f2358a649b83c17959e9993e777c2080879f3801e6f0d999ad3dd"
 }
