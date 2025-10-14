@@ -3,6 +3,7 @@ import koaBody from "koa-body";
 import router from "./router/index";
 import logger from 'koa-logger'
 import {loggerMiddleware} from './log/index'
+import responseHandler from "./middleware/response";
 const app = new Koa();
 
 
@@ -26,8 +27,16 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 
+// 处理响应格式的中间件
+app.use(responseHandler);
 // 使用路由 allowedMethods 中间件用来处理非法请求
 app.use(router.routes()).use(router.allowedMethods());
+// 处理
+// 应用启动错误处理
+app.on('error', (err, ctx) => {
+  console.error('server error', err, ctx);
+});
+
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {

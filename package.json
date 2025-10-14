@@ -20,6 +20,7 @@
   "dependencies": {
     "@koa/router": "^14.0.0",
     "@prisma/client": "6.17.1",
+    "bcryptjs": "^3.0.2",
     "jsonwebtoken": "^9.0.2",
     "koa": "^3.0.1",
     "koa-body": "^6.0.1",

@@ -3,8 +3,8 @@ import { UserController } from "../controllers";
 
 const router = new Router({prefix:"/user"});
 
-router.post("/getUsers",UserController.getUsers)
 
+router.post("/register",UserController.register)
 
 
 
