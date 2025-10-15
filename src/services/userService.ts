@@ -1,5 +1,6 @@
 import { prisma } from ".";
 import bcrytjs from "bcryptjs";
+import {createToken} from "../middleware/auth";
 /**
  * 校验密码
  * @param password 明文密码
@@ -38,8 +39,43 @@ export const register = async (email: string, password: string) => {
     where: { email }
   });
   if (existingUser) {
-    throw new Error("Email already exists");
+    return { success: false, message: "邮箱已被注册" };
   }
+  // 创建新用户
+  const hashedPassword = hashPassword(password);
+  const  newUser = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword
+    }
+  });
+
+  return {
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name || '',
+      createdAt: newUser.createdAt,
+      updatedAt: newUser.updatedAt
+   };
+}
+
+
+export const login = async (email: string, password: string) => {
+  const user = await prisma.user.findUnique({
+    where: { email }
+  });
+  if (!user) {
+    return { success: false, message: "用户不存在" };
+  }
+  const isPasswordValid = validatePassword(password, user.password);
+  if (!isPasswordValid) {
+    return { success: false, message: "密码错误" };
+  }
+  return {
+      success: true,
+      message: "登录成功",
+      token: createToken({id: user.id, email: user.email}),
+   };
 }
 
 

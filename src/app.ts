@@ -4,6 +4,7 @@ import router from "./router/index";
 import logger from 'koa-logger'
 import {loggerMiddleware} from './log/index'
 import responseHandler from "./middleware/response";
+import {VerifyTokenMiddleware} from "./middleware/auth";
 const app = new Koa();
 
 
@@ -25,10 +26,10 @@ if (process.env.NODE_ENV === 'production') {
 }else {
   app.use(logger());
 }
-
-
 // 处理响应格式的中间件
 app.use(responseHandler);
+// // 验证token中间件
+// app.use(VerifyTokenMiddleware);
 // 使用路由 allowedMethods 中间件用来处理非法请求
 app.use(router.routes()).use(router.allowedMethods());
 // 处理

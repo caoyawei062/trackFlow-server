@@ -34,8 +34,6 @@ const register = async (ctx: ExtendedContext) => {
         ResponseHelper.success(ctx, result, "注册成功");
         
     } catch (error: any) {
-        console.error('Register error:', error);
-        
         // 错误响应 - 使用 ResponseHelper.error 设置标准格式
         ResponseHelper.error(
             ctx, 
@@ -59,10 +57,10 @@ const login = async (ctx: ExtendedContext) => {
         }
 
         // 这里需要实现 UserService.login 方法
-        // const result = await UserService.login(email, password);
+        const result = await UserService.login(email, password);
         
         // 临时响应，展示成功格式
-        ResponseHelper.success(ctx, { email, token: "sample_token" }, "登录成功");
+        ResponseHelper.success(ctx, { ...result }, "登录成功");
         
     } catch (error: any) {
         ResponseHelper.error(ctx, ResponseCode.UNAUTHORIZED, "登录失败");
