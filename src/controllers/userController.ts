@@ -31,7 +31,7 @@ const register = async (ctx: ExtendedContext) => {
         const result = await UserService.register(email, password);
         
         // 成功响应 - 使用 ResponseHelper.success 设置标准格式
-        ResponseHelper.success(ctx, result, "注册成功");
+        ResponseHelper.success(ctx, result, result.success ? "注册成功" : result.message);
         
     } catch (error: any) {
         // 错误响应 - 使用 ResponseHelper.error 设置标准格式
@@ -60,8 +60,8 @@ const login = async (ctx: ExtendedContext) => {
         const result = await UserService.login(email, password);
         
         // 临时响应，展示成功格式
-        ResponseHelper.success(ctx, { ...result }, "登录成功");
-        
+        ResponseHelper.success(ctx, { ...result }, result.success ? "登录成功" : result.message);
+
     } catch (error: any) {
         ResponseHelper.error(ctx, ResponseCode.UNAUTHORIZED, "登录失败");
     }
@@ -99,4 +99,21 @@ const getUsers = async (ctx: ExtendedContext) => {
     }
 }
 
-export { register, login, getUsers };
+const getUserInfo = async (ctx: ExtendedContext) => {
+    try {
+        const userId = ctx.query?.id; // 假设中间件已经将用户信息存储在 ctx.state.user 中
+        const email = ctx.query?.email as string | undefined;
+
+        const user = await UserService.getUserInfo(Number(userId), email);
+        if (!user.success) {
+            ResponseHelper.notFound(ctx, "用户未找到");
+            return;
+        }
+        ResponseHelper.success(ctx, user, "获取用户信息成功");
+        
+    } catch (error: any) {
+        console.error('Get user info error:', error);
+        ResponseHelper.databaseError(ctx, "获取用户信息失败");
+    }
+}
+export { register, login, getUsers, getUserInfo };

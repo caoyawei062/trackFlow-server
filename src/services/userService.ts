@@ -78,7 +78,25 @@ export const login = async (email: string, password: string) => {
    };
 }
 
-
+export const getUserInfo = async (userId?: number,email?: string) => {
+  if (!userId && !email) {
+    return { success: false, message: "缺少用户信息" };
+  }
+  const user = await prisma.user.findUnique({
+    where: userId ? { id: userId } : { email: email! },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  });
+  return {
+    success: true,
+    userInfo:user
+  };
+}
 
 
 
