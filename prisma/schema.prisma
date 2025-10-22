@@ -14,22 +14,82 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// 用户表
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
   password  String   @db.VarChar(255)
-  tasks     Task[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+/// 任务表
 model Task {
-  id          Int      @id @default(autoincrement())
+  /// 任务主键 ID
+  id          Int     @id @default(autoincrement())
+  /// 任务标题
   title       String
+  /// 任务描述
   description String?
-  completed   Boolean  @default(false)
-  user        User     @relation(fields: [userId], references: [id])
-  userId      Int
+  /// 任务进度状态
+  completed   Float   @default(0)
+
+  /// 任务所属用户（owner）——仅保留 scalar 字段，由应用层保证引用一致性
+  userId Int
+
+  // 创建者 ID（保留原来的字段名 createId 以兼容现有代码），如果想统一可改为 creatorId 并同步代码
+  createId Int
+
+  /// 状态
+  status     String    @default("create")
+  // 指派给的用户（可选）——仅保留 scalar 字段
+  assignedTo Int?
+  /// 任务开始时间和截止时间
+  startedAt  DateTime?
+  dueDate    DateTime?
+
+  // 任务优先级，数值越大优先级越高
+  priority  Int @default(0)
+  // 实际花费时间，单位分钟
+  timeSpent Int @default(0)
+
+  // 可选：任务完成的时间点，便于记录历史
+  completedAt DateTime?
+
+  // 可选：软删除时间，便于保留历史记录
+  deletedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  /// 任务所属项目 ID（可选）——仅保留 scalar 字段
+  projectId Int?
+
+  // 保留索引以优化查询，但不创建外键约束
+  @@index([userId])
+  @@index([assignedTo])
+  @@index([priority])
+  @@index([projectId])
+}
+
+// 用户与项目的多对多关系表
+model ProjectUser {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  projectId Int
+  role      String   @default("member") // 用户在项目中的角色，如 "member"、"admin" 等
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// 项目表
+model Project {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([name])
 }
